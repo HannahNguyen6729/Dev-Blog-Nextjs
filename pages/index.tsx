@@ -8,6 +8,7 @@ const inter = Inter({subsets: ["latin"]});
 
 const Home: NextPage = ({
   blogData,
+  tagList,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   return (
     <>
@@ -21,8 +22,18 @@ const Home: NextPage = ({
             </p>
           </div>
         </section>
+
         <section className="flex flex-col items-center text-[1.5rem] mt-12">
-          <div className="flex gap-3 mb-12"> </div>
+          <div className="flex gap-3 mb-12">
+            {tagList.map((tag: string, idx: number) => (
+              <button
+                key={idx}
+                className="label hover:bg-sky-400 transition-all duration-300"
+              >
+                {tag}
+              </button>
+            ))}
+          </div>
           {blogData.map((blog: BlogPost) => (
             <div
               key={blog.id}
@@ -48,10 +59,21 @@ export default Home;
 
 export const getServerSideProps: GetServerSideProps = async () => {
   const blogs = await getBlogs();
-  console.log("blogs", blogs);
+  //console.log("blogs", blogs);
+  let tagList: string[] = [];
+  blogs.forEach((blog) => {
+    blog.tags.forEach((tag) => {
+      if (!tagList.includes(tag)) {
+        tagList.push(tag);
+      }
+    });
+  });
+  // console.log("Tag list", tagList);
+
   return {
     props: {
       blogData: blogs,
+      tagList,
     },
   };
 };

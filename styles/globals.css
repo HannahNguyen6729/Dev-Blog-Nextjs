@@ -2,3 +2,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+  .label {
+    @apply bg-sky-600 px-2 mt-2 font-semibold rounded-xl text-zinc-800;
+  }
+}
