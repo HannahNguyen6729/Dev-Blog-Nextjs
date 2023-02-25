@@ -1,11 +1,12 @@
 // call query function and get data from github graphql
 
+import {BlogPost} from "@/types/blog";
 import {discussionGrapQL} from "./graphql";
 
 const API_URL = "https://api.github.com/graphql";
 
 //function to get blogs from github api
-export const getBlogs = async () => {
+export const getBlogs = async (): Promise<BlogPost[]> => {
   const response = await fetch(API_URL, {
     method: "POST",
     headers: {
@@ -18,6 +19,48 @@ export const getBlogs = async () => {
   });
 
   const result = await response.json();
-  const blogs = await result.data.repository.discussions.edges;
-  return blogs;
+  const blogs = await result.data.repository.discussions.nodes;
+  const posts = blogs.map((blog: any): BlogPost => {
+    const {
+      title,
+      author,
+      createdAt,
+      lastEditedAt: lastEdited,
+      number: id,
+      bodyHTML: html,
+      bodyText,
+      labels,
+      url: discussionUrl,
+    } = blog;
+    const url = `/blog/${id}`;
+    const authorUrl = author.url;
+    const authorName = author.login;
+    const authorAvatar = author.avatarUrl;
+    const tags: string[] = labels.nodes.map(
+      (label: {name: string}) => label.name
+    );
+
+    const post = {
+      id,
+      url,
+      discussionUrl,
+      title,
+      html,
+      bodyText,
+      tags,
+      createdAt,
+      lastEdited,
+      author: {name: authorName, url: authorUrl, avatar: authorAvatar},
+    };
+    return post;
+  });
+
+  return posts;
 };
+
+// tags: [ 'start', '2023', 'project' ],
+// author: {
+//   name: 'HannahNguyen6729',
+//   url: 'https://github.com/HannahNguyen6729',
+//   avatar: 'https://avatars.githubusercontent.com/u/81440768?u=0649d6d35311519e4131037cdd9098d22c0a856d&v=4'
+// }
