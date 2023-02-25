@@ -1,11 +1,13 @@
 import {BlogPost} from "@/types/blog";
 import React from "react";
+import BlogHeader from "./BlogHeader";
 
 const BlogPreview: React.FC<BlogPost> = (props): JSX.Element => {
   const {title, bodyText, author, createdAt, tags} = props;
   const previewText = bodyText.substring(0, 150) + "...";
   return (
     <section>
+      <BlogHeader author={author} createdAt={createdAt} />
       <h2 className="font-bold">{title}</h2>
       <p className="mt-2">{previewText}</p>
       <div className="flex gap-3">
