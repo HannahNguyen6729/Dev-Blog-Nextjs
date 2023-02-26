@@ -3,7 +3,7 @@ import {getBlogs} from "@/server/blog";
 import {BlogPost} from "@/types/blog";
 import {Inter} from "@next/font/google";
 import {GetServerSideProps, InferGetServerSidePropsType, NextPage} from "next";
-import {useState} from "react";
+import {useMemo, useState} from "react";
 
 const inter = Inter({subsets: ["latin"]});
 
@@ -23,7 +23,18 @@ const Home: NextPage = ({
     }
   };
 
+  const filteredBlogData: BlogPost[] = useMemo(() => {
+    return checkedTags.length > 0
+      ? blogData.filter((blog: BlogPost) => {
+          return checkedTags.every((checkedTag) =>
+            blog.tags.includes(checkedTag)
+          );
+        })
+      : blogData;
+  }, [blogData, checkedTags]);
+
   console.log("checkedTags", checkedTags);
+  console.log("filteredBlogData", filteredBlogData);
   return (
     <>
       <main className="w-screen h-screen overflow-auto flex flex-col items-center bg-zinc-800 text-neutral-300 font-poppins">
@@ -52,7 +63,7 @@ const Home: NextPage = ({
               </button>
             ))}
           </div>
-          {blogData.map((blog: BlogPost) => (
+          {filteredBlogData.map((blog: BlogPost) => (
             <div
               key={blog.id}
               className="max-w-[28em] max-h-[20em] overflow-hidden mx-6 mb-6 bg-neutral-300 text-zinc-800 rounded-lg p-4 hover:bg-neutral-500 hover:text-neutral-300 transition-all duration-300"
