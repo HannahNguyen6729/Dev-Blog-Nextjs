@@ -5,6 +5,9 @@
 
 @layer components {
   .label {
-    @apply bg-sky-600 px-2 mt-2 font-semibold rounded-xl text-zinc-800;
+    @apply bg-sky-300 px-2 mt-2 font-semibold rounded-xl text-zinc-800 hover:bg-sky-400 transition-all duration-300;
+  }
+  .selectedLabel {
+    @apply bg-yellow-500 px-2 mt-2 font-semibold rounded-xl text-zinc-50 hover:bg-yellow-600 transition-all duration-300;
   }
 }

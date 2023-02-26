@@ -3,6 +3,7 @@ import {getBlogs} from "@/server/blog";
 import {BlogPost} from "@/types/blog";
 import {Inter} from "@next/font/google";
 import {GetServerSideProps, InferGetServerSidePropsType, NextPage} from "next";
+import {useState} from "react";
 
 const inter = Inter({subsets: ["latin"]});
 
@@ -10,6 +11,19 @@ const Home: NextPage = ({
   blogData,
   tagList,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+  const [checkedTags, setCheckedTags] = useState<string[]>([]);
+
+  const handleClickTag = (tag: string, idx: number) => {
+    //find all tags checked
+    if (checkedTags.includes(tag)) {
+      checkedTags.filter((checkedTag) => checkedTag !== tag);
+      setCheckedTags(checkedTags.filter((checkedTag) => checkedTag !== tag));
+    } else {
+      setCheckedTags([...checkedTags, tag]);
+    }
+  };
+
+  console.log("checkedTags", checkedTags);
   return (
     <>
       <main className="w-screen h-screen overflow-auto flex flex-col items-center bg-zinc-800 text-neutral-300 font-poppins">
@@ -27,8 +41,12 @@ const Home: NextPage = ({
           <div className="flex gap-3 mb-12">
             {tagList.map((tag: string, idx: number) => (
               <button
+                onClick={() => handleClickTag(tag, idx)}
                 key={idx}
-                className="label hover:bg-sky-400 transition-all duration-300"
+                //logic of changing the color of the tag
+                className={`${
+                  checkedTags.includes(tag) ? "selectedLabel" : "label"
+                }`}
               >
                 {tag}
               </button>
