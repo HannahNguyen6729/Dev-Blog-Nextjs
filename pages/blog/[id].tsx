@@ -1,9 +1,26 @@
+import BlogHeader from "@/components/BlogHeader";
 import {getBlogDetail} from "@/server/blog";
-import {GetServerSideProps, NextPage} from "next";
+import {GetServerSideProps, InferGetServerSidePropsType, NextPage} from "next";
 import React from "react";
+import parse from "html-react-parser";
+import styles from "./id.module.css";
 
-const SinglePost: NextPage = () => {
-  return <div> blog post </div>;
+const SinglePost: NextPage = ({
+  blogDetail,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+  const {createdAt, title, bodyHTML, author} = blogDetail;
+
+  return (
+    <section className="layout">
+      <div className="max-w-[50%]">
+        <h1 className="text-center my-10 text-[2rem] font-bold">{title}</h1>
+        <div className="flex justify-center mb-4">
+          <BlogHeader author={author} createdAt={createdAt} />
+        </div>
+        <div className={`${styles.html} flex flex-col`}>{parse(bodyHTML)}</div>
+      </div>
+    </section>
+  );
 };
 
 export default SinglePost;

@@ -10,4 +10,7 @@
   .selectedLabel {
     @apply bg-yellow-500 px-2 mt-2 font-semibold rounded-xl text-zinc-50 hover:bg-yellow-600 transition-all duration-300;
   }
+  .layout {
+    @apply w-screen h-screen overflow-auto flex flex-col items-center bg-zinc-800 text-neutral-300 font-poppins;
+  }
 }
