@@ -25,3 +25,21 @@ export const discussionGrapQL = (discussionCategoryId: string | undefined) => {
     }
   }`;
 };
+
+//single post
+export const discussionDetailGgl = (postId: number | undefined) => {
+  return `{
+    repository(name: "Dev-Blog-Nextjs", owner: "HannahNguyen6729") {
+      discussion( number: ${postId} ) { 
+          title
+          createdAt
+          bodyHTML
+          author {
+            login
+            avatarUrl
+            url
+          }
+      }
+    }
+  }`;
+};

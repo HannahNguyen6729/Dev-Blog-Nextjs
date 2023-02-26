@@ -10,3 +10,10 @@ export interface BlogPost {
   lastEdited?: string | null;
   author: {name: string; url: string; avatar: string};
 }
+
+export interface BlogDetail {
+  title: string;
+  bodyHTML: string;
+  createdAt: string;
+  author: {name: string; url: string; avatar: string};
+}

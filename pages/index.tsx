@@ -33,8 +33,6 @@ const Home: NextPage = ({
       : blogData;
   }, [blogData, checkedTags]);
 
-  console.log("checkedTags", checkedTags);
-  console.log("filteredBlogData", filteredBlogData);
   return (
     <>
       <main className="w-screen h-screen overflow-auto flex flex-col items-center bg-zinc-800 text-neutral-300 font-poppins">
@@ -98,7 +96,6 @@ export const getServerSideProps: GetServerSideProps = async () => {
     });
   });
   // console.log("Tag list", tagList);
-
   return {
     props: {
       blogData: blogs,

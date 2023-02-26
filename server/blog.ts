@@ -1,7 +1,7 @@
 // call query function and get data from github graphql
 
-import {BlogPost} from "@/types/blog";
-import {discussionGrapQL} from "./graphql";
+import {BlogDetail, BlogPost} from "@/types/blog";
+import {discussionDetailGgl, discussionGrapQL} from "./graphql";
 
 const API_URL = "https://api.github.com/graphql";
 
@@ -64,3 +64,30 @@ export const getBlogs = async (): Promise<BlogPost[]> => {
 //   url: 'https://github.com/HannahNguyen6729',
 //   avatar: 'https://avatars.githubusercontent.com/u/81440768?u=0649d6d35311519e4131037cdd9098d22c0a856d&v=4'
 // }
+
+//get a single blog post
+export const getBlogDetail = async (blogId: number): Promise<BlogDetail> => {
+  const response = await fetch(API_URL, {
+    method: "POST",
+    headers: {
+      Authorization: `token ${process.env.GITHUB_ACCESS_TOKEN}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      query: discussionDetailGgl(blogId),
+    }),
+  });
+
+  const result = await response.json();
+  let discussion = await result.data.repository.discussion;
+
+  const {author, createdAt, title, bodyHTML} = discussion;
+
+  const detail = {
+    author: {url: author.url, name: author.login, avatar: author.avatarUrl},
+    createdAt,
+    title,
+    bodyHTML,
+  };
+  return detail;
+};
